@@ -1,10 +1,11 @@
 {
   "name": "advent-of-code-2023",
+  "type": "module",
   "private": true,
   "version": "1.0.0",
   "description": "Advent of Code 2023 challenge code solutions (Node.js, Rust)",
-  "main": "index.js",
   "scripts": {
+    "day01": "node src/day01.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,5 +27,11 @@
   "bugs": {
     "url": "https://github.com/thomasdom/advent-of-code-2023/issues"
   },
-  "homepage": "https://github.com/thomasdom/advent-of-code-2023#readme"
+  "homepage": "https://github.com/thomasdom/advent-of-code-2023#readme",
+  "devDependencies": {
+    "@biomejs/biome": "1.4.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
