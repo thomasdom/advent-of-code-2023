@@ -6,6 +6,7 @@
   "description": "Advent of Code 2023 challenge code solutions (Node.js, Rust)",
   "scripts": {
     "day01": "node src/day01.mjs",
+    "day02": "node src/day02.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
