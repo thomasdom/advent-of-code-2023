@@ -7,6 +7,7 @@
   "scripts": {
     "day01": "node src/day01.mjs",
     "day02": "node src/day02.mjs",
+    "day03": "node src/day03.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
