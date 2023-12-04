@@ -45,3 +45,28 @@ async function main() {
 }
 
 main().catch(console.error);
+
+async function bonus() {
+	const input = await readFile(resolve("input/day03.txt"), {
+		encoding: "utf8",
+	});
+
+	const entities = parseNumbersAndSymbols(input);
+	const numbers = entities.filter((e) => e.type === "number");
+	const symbols = entities.filter((e) => e.type === "symbol");
+
+	const partNumbers = symbols
+		.filter((s) => s.token === "*")
+		.map((s) => {
+			const adjacentNumbers = numbers
+				.filter((n) => adjacent(n, s))
+				.map((n) => n.value);
+			return adjacentNumbers.length === 2
+				? adjacentNumbers[0] * adjacentNumbers[1]
+				: 0;
+		});
+
+	console.log("Bonus:", sum(partNumbers));
+}
+
+bonus().catch(console.error);
