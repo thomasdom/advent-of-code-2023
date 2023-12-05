@@ -36,3 +36,46 @@ async function main() {
 }
 
 main().catch(console.error);
+
+async function bonus() {
+	const input = await readFile(resolve("input/day04.txt"), {
+		encoding: "utf8",
+	});
+
+	const scratchCards = input
+		.split("\n")
+		.map((line) => {
+			const [, rawCardNumber, rawWinningNumbers, rawNumbers] = line.match(
+				/^Card\s+(\d+): (.*) \| (.*)$/,
+			);
+
+			const [...parsedWinningNumbers] = rawWinningNumbers.matchAll(/(\d+)/g);
+			const [...parsedNumbers] = rawNumbers.matchAll(/(\d+)/g);
+
+			return {
+				cardNumber: parseInt(rawCardNumber, 10),
+				winningNumbers: parsedWinningNumbers.map((n) => parseInt(n, 10)),
+				numbers: parsedNumbers.map((n) => parseInt(n, 10)),
+			};
+		})
+		.map(({ cardNumber, winningNumbers, numbers }) => ({
+			cardNumber,
+			nbWinningNumbers: intersection(winningNumbers, numbers).length,
+		}));
+
+	const copies = [...scratchCards];
+	let i = 0;
+	while (i < copies.length) {
+		const cardNumber = copies[i].cardNumber;
+		const nbWinningNumbers = copies[i].nbWinningNumbers;
+
+		copies.push(
+			...scratchCards.slice(cardNumber, cardNumber + nbWinningNumbers),
+		);
+		++i;
+	}
+
+	console.log("Bonus:", copies.length);
+}
+
+bonus().catch(console.error);
