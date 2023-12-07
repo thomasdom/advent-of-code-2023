@@ -86,3 +86,71 @@ async function main() {
 }
 
 main().catch(console.error);
+
+
+const JOKER_CARD_POINTS = {
+	A: 12,
+	K: 11,
+	Q: 10,
+	T: 9,
+	9: 8,
+	8: 7,
+	7: 6,
+	6: 5,
+	5: 4,
+	4: 3,
+	3: 2,
+	2: 1,
+	J: 0
+};
+
+async function bonus() {
+	const input = await readFile(resolve("input/day07.txt"), {
+		encoding: "utf8",
+	});
+
+	const rawHands = parseGames(input);
+	const hands = rawHands.map((hand) => {
+		const cardPoints = new Array(13).fill(0);
+		for (const card of hand.cards) {
+			cardPoints[JOKER_CARD_POINTS[card]] += 1;
+		}
+		const jokers = cardPoints.shift()
+		const orderedStrengths = cardPoints.sort((a, b) => b - a);
+		let type = HAND_POINTS.highCard;
+		if (orderedStrengths[0] + jokers === 5) {
+			type = HAND_POINTS.fiveOfAKind;
+		} else if (orderedStrengths[0] + jokers === 4) {
+			type = HAND_POINTS.fourOfAKind;
+		} else if (orderedStrengths[0] + jokers === 3 && orderedStrengths[1] === 2) {
+			type = HAND_POINTS.fullHouse;
+		} else if (orderedStrengths[0] + jokers === 3) {
+			type = HAND_POINTS.threeOfAKind;
+		} else if (orderedStrengths[0] + jokers === 2 && orderedStrengths[1] === 2) {
+			type = HAND_POINTS.twoPair;
+		} else if (orderedStrengths[0] + jokers === 2) {
+			type = HAND_POINTS.onePair;
+		}
+		return { ...hand, cardPoints, type };
+	});
+
+	const orderedHands = hands.sort((a, b) => {
+		if (a.type !== b.type) {
+			return b.type - a.type;
+		}
+		for (let i = 0; i < a.cards.length; i++) {
+			if (a.cards[i] !== b.cards[i]) {
+				return JOKER_CARD_POINTS[b.cards[i]] - JOKER_CARD_POINTS[a.cards[i]];
+			}
+		}
+		return 0;
+	});
+
+	const solution = orderedHands.reduce((acc, hand, index) => {
+		return acc + hand.bid * (orderedHands.length - index);
+	}, 0);
+
+	console.log("Bonus:", solution);
+}
+
+bonus().catch(console.error);
